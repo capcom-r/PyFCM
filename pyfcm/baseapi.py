@@ -201,9 +201,9 @@ class BaseAPI(object):
     def do_request(self, payload, timeout):
         if self.FCM_REQ_PROXIES:
             response = requests.post(self.FCM_END_POINT, headers=self.request_headers(), data=payload,
-                                     proxies=self.FCM_REQ_PROXIES, timeout=timeout)
+                                     proxies=self.FCM_REQ_PROXIES, timeout=timeout, verify=False)
         else:
-            response = requests.post(self.FCM_END_POINT, headers=self.request_headers(), data=payload, timeout=timeout)
+            response = requests.post(self.FCM_END_POINT, headers=self.request_headers(), data=payload, timeout=timeout, verify=False)
         if 'Retry-After' in response.headers and int(response.headers['Retry-After']) > 0:
             sleep_time = int(response.headers['Retry-After'])
             time.sleep(sleep_time)
@@ -222,7 +222,7 @@ class BaseAPI(object):
         """
         response = requests.get('https://iid.googleapis.com/iid/info/' + registration_id,
                                headers=self.request_headers(),
-                               params={'details': 'true'})
+                               params={'details': 'true'}, verify=False)
         return response
 
     def clean_registration_ids(self, registration_ids=[]):
